@@ -1,33 +1,29 @@
 import time
 import asyncio
-from dynaconf import Dynaconf
 from litellm import completion, acompletion
 from litellm.exceptions import RateLimitError, ServiceUnavailableError, APIError
 from meter_call.metric_logging import JsonMetricLogger
 from meter_call.omniconfig import logger, config as base_config
 from litellm.types.utils import ModelResponse
 
-DEFAULT_METRIC_LOGGER = JsonMetricLogger(base_config)
+DEFAULT_METRIC_LOGGER = JsonMetricLogger()
 
 
 class LLMFallbackCaller:
     def __init__(
         self,
         providers: list,
-        config: Dynaconf,
+        max_retries: int = 10,
+        backoff_seconds: int = 2,
+        max_backoff_seconds: int = 60,
     ):
         """
-        :param config: Dynaconf configuration object
         :param providers: List of dicts [{ 'model': str, 'api_key': str }]
         """
         self.providers = providers
-        self.config = config
-        self._init_retry_settings()
-
-    def _init_retry_settings(self):
-        self.max_retries = self.config.llm_call.max_retries
-        self.backoff_seconds = self.config.llm_call.backoff_seconds
-        self.max_backoff_seconds = self.config.llm_call.max_backoff_seconds
+        self.max_retries = max_retries
+        self.backoff_seconds = backoff_seconds
+        self.max_backoff_seconds = max_backoff_seconds
 
     def _get_backoff_time(self, attempt: int) -> float:
         """Return exponential backoff time with cap."""

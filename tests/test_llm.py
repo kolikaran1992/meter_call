@@ -37,7 +37,7 @@ messages = [{"role": "user", "content": "tell me hi in 5 words"}]
 # ---------------------------
 @pytest.fixture(params=providers_list)
 def llm_caller(request):
-    return LLMFallbackCaller(providers=request.param, config=config)
+    return LLMFallbackCaller(providers=request.param)
 
 
 # ---------------------------

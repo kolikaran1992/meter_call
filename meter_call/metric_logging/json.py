@@ -1,9 +1,7 @@
-import asyncio
 import json
 import uuid
 from pathlib import Path
 from meter_call.metric_logging.base import MetricLoggerBase
-from dynaconf import Dynaconf
 from meter_call.omniconfig import logger, config
 
 

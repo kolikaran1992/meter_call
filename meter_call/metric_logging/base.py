@@ -3,8 +3,7 @@ import getpass
 import json
 import traceback as tb
 import asyncio
-from dynaconf import Dynaconf
-from meter_call.omniconfig import logger
+from meter_call.omniconfig import logger, config
 
 
 class MetricLoggerBase:
@@ -13,15 +12,14 @@ class MetricLoggerBase:
     Contains common methods and properties for metric preparation and file handling.
     """
 
-    def __init__(self, config: Dynaconf):
+    def __init__(self):
         self.available = False
-        self.config = config
         self.json_metric_dir = Path(config.metric_logging.json.json_store_dir)
 
     def _prepare_metrics(self, **metrics):
         """Prepares a metrics dictionary with common data."""
         metrics_data = metrics.copy()
-        metrics_data["insert_ts_utc"] = self.config.metric_logging.ts_now_iso
+        metrics_data["insert_ts_utc"] = config.metric_logging.ts_now_iso
         metrics_data["user"] = getpass.getuser()
         return metrics_data
 

@@ -1,4 +1,3 @@
-from dynaconf import Dynaconf
 import mysql.connector
 import asyncmy
 import json
@@ -12,21 +11,19 @@ class MySQLMetricLogger(MetricLoggerBase):
     Handles all MySQL-related metric logging, both sync and async.
     """
 
-    def __init__(self, config: Dynaconf):
+    def __init__(self, mysql_config: dict):
         super().__init__()
         self._mysql_sync_conn = None
         self._mysql_async_pool = None
         self._sync_available = False
         self._async_available = False
-        self.config = config
+        self.mysql_config = mysql_config.copy()
         self.init_sync_connection()
 
     def init_sync_connection(self):
         """Initializes synchronous MySQL connection."""
         try:
-            self._mysql_sync_conn = mysql.connector.connect(
-                **self.config.as_dict()["MYSQL"]
-            )
+            self._mysql_sync_conn = mysql.connector.connect(**self.mysql_config)
             self._sync_available = True
             logger.info("Sync MySQL connection available")
         except mysql.connector.Error:
@@ -37,9 +34,7 @@ class MySQLMetricLogger(MetricLoggerBase):
     async def init_async_connection(self):
         """Initializes asynchronous MySQL connection pool."""
         try:
-            self._mysql_async_pool = await asyncmy.create_pool(
-                **self.config.as_dict()["MYSQL"]
-            )
+            self._mysql_async_pool = await asyncmy.create_pool(**self.mysql_config)
             self._async_available = True
             logger.info("Async MySQL connection available")
         except Exception:

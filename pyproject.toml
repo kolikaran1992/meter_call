@@ -1,0 +1,25 @@
+[project]
+name = "meter-call"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "kolikaran1992",email = "kolikaran1992@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "dynalog @ git+ssh://git@github.com/kolikaran1992/dynalog.git",
+    "mysql-connector-python (>=9.4.0,<10.0.0)",
+    "asyncmy (>=0.2.10,<0.3.0)",
+    "pytest-asyncio (>=1.2.0,<2.0.0)",
+    "litellm (>=1.78.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^7.0.1"
+

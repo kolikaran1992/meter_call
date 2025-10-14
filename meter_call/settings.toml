@@ -1,0 +1,18 @@
+[default.llm_call]
+backoff_seconds = 2
+max_backoff_seconds = 30
+max_retries = 10
+
+[default.metric_logging]
+ts_now_iso = "@jinja {{this._get_now_iso(this.metric_logging.tz)}}"
+tz = "UTC"
+
+[default.metric_logging.json]
+base_dir = '@jinja /tmp/meter_call/metrics'
+json_store_dir = "@jinja {{this.metric_logging.json.base_dir}}/{{this._get_now_ts(this.metric_logging.tz).strftime('%Y/%m/%d')}}"
+
+[default.llm_metric_logging.mysql]
+database = ""
+host = ""
+password = ""
+user = ""

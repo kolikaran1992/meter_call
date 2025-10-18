@@ -9,4 +9,4 @@ config = config.from_env(
     ],
 )
 
-logger = get_logger(__name__)
+logger = get_logger()
